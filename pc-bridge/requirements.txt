@@ -1,0 +1,3 @@
+# Only needed for gamepad mode (the default). Also install the ViGEmBus driver:
+# https://github.com/nefarius/ViGEmBus/releases
+vgamepad

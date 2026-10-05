@@ -1,0 +1,21 @@
+# Android SDK pieces fetched by build_apk.py --download-sdk, and build output
+android/.sdk/
+android/build/
+# Debug signing key, generated per machine on first build. Never commit a keystore.
+*.keystore
+*.jks
+
+# Built APKs go on the GitHub Releases page, not in git
+*.apk
+dist/
+
+# Per-user bridge settings (calibration etc.), created on first run
+pc-bridge/config.json
+
+# Third-party installers (get ViGEmBus from its own releases page)
+ViGEmBus*.exe
+
+__pycache__/
+*.pyc
+.vscode/
+.idea/
