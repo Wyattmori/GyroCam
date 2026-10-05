@@ -38,8 +38,12 @@ try:
 except ImportError:  # not Windows
     msvcrt = None
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+VERSION = "1.3.1"
+FROZEN = getattr(sys, "frozen", False)  # running as GyroCam-bridge.exe (PyInstaller)
+# Keep config.json next to the .exe, not in PyInstaller's temporary unpack folder.
+HERE = os.path.dirname(os.path.abspath(sys.executable if FROZEN else __file__))
 CONFIG_PATH = os.path.join(HERE, "config.json")
+VIGEMBUS_URL = "https://github.com/nefarius/ViGEmBus/releases/latest"
 
 CONFIG_VERSION = 4
 
@@ -570,10 +574,20 @@ def make_output(cfg):
     if cfg["mode"] == "gamepad":
         try:
             return GamepadOutput(cfg)
-        except Exception as e:  # missing vgamepad / ViGEmBus
-            print(f"\n[!] Gamepad mode unavailable ({e}). "
-                  "Install ViGEmBus and run: pip install vgamepad. Falling back to mouse.")
-            cfg["mode"] = "mouse"
+        except ImportError:
+            print("\n[!] Gamepad mode needs the vgamepad package: pip install -r requirements.txt"
+                  "\n    (or use GyroCam-bridge.exe, which includes it). Falling back to mouse mode.")
+        except Exception as e:  # vgamepad present but it can't reach the ViGEmBus driver
+            print("\n[!] Gamepad mode needs the ViGEmBus driver, which doesn't seem to be installed"
+                  f" ({e}).\n    Download and run ViGEmBus_..._x64_x86_arm64.exe from:\n    {VIGEMBUS_URL}"
+                  "\n    then restart the bridge. Falling back to mouse mode for now.")
+            if msvcrt and sys.stdin and sys.stdin.isatty():
+                print("    Open that page now? [Y/n] ", end="", flush=True)
+                if msvcrt.getwch().lower() != "n":
+                    import webbrowser
+                    webbrowser.open(VIGEMBUS_URL)
+                print()
+        cfg["mode"] = "mouse"
     return MouseOutput(cfg)
 
 
@@ -1122,7 +1136,7 @@ def broadcast_addresses():
 
 def main():
     cfg = load_config()
-    print(__doc__.strip().split("\n\n")[0])
+    print(__doc__.strip().split("\n\n")[0] + f"  [v{VERSION}]")
     print(f"\nListening on UDP {cfg['port']}. Type one of these IPs into the phone app "
           f"(or leave it on auto): {', '.join(local_ipv4s()) or 'unknown'}")
     print("Keys: r recenter | h set home | d find deadzone | c calibrate | +/- sensitivity | "
@@ -1131,4 +1145,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        if not FROZEN:
+            raise
+        # A double-clicked .exe would otherwise vanish before the error can be read.
+        import traceback
+        traceback.print_exc()
+        if isinstance(e, OSError) and getattr(e, "winerror", None) == 10048:
+            print("\nPort 47823 is already in use - is another GyroCam bridge already running?")
+        input("\nPress Enter to close.")

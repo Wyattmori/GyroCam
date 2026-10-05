@@ -10,7 +10,7 @@ filming replays.
                      <--beacon UDP 47824--
 ```
 
-**Download:** get `GyroCam.apk` and the bridge zip from the
+**Download:** get `GyroCam.apk` and `GyroCam-bridge.exe` from the
 [Releases](../../releases) page. **Want to improve it?** See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 > Fan-made and unofficial. Not affiliated with EA, Full Circle or the ReSkate project.
@@ -31,12 +31,18 @@ Roll can't be sent: there's no live roll input. Use the replay editor's Roll set
 ## Setup
 
 ### PC
-1. Install Python 3.10+.
-2. For gamepad mode (the default), install the [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases)
-   driver, then run `pip install -r pc-bridge/requirements.txt`. Without them the bridge falls
-   back to mouse mode.
-3. Run `pc-bridge/run_bridge.bat`. Allow Python through Windows Firewall on **Private** networks
-   when Windows asks.
+1. Install the [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases/latest) driver
+   (`ViGEmBus_..._x64_x86_arm64.exe`). This is what lets the bridge create a virtual Xbox
+   controller. Without it the bridge falls back to mouse mode; it tells you and offers to open
+   the download page.
+2. Download `GyroCam-bridge.exe` from [Releases](../../releases), put it in its own folder
+   (its `config.json` is saved next to it) and run it. No Python needed.
+   - Windows SmartScreen may warn about an unrecognised app: click **More info → Run anyway**.
+   - When Windows Firewall asks, allow it on **Private** networks so the phone can reach it.
+
+Running from source instead: install Python 3.10+, run
+`pip install -r pc-bridge/requirements.txt`, then `pc-bridge/run_bridge.bat`. To build the exe
+yourself: `pip install pyinstaller`, then `python pc-bridge/build_exe.py`.
 
 ### Phone
 1. Download `GyroCam.apk` from [Releases](../../releases) (or build it, see below) and install

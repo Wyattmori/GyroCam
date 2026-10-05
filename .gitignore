@@ -19,3 +19,8 @@ __pycache__/
 *.pyc
 .vscode/
 .idea/
+
+# PyInstaller work files (pc-bridge/build_exe.py)
+pc-bridge/build/
+*.spec
+*.exe

@@ -74,7 +74,8 @@ Two gotchas:
   tilt, then setting `gamepad.stick_curve_exponent` by default.
 - **Replay editor controls.** Confirming which inputs the replay editor's free camera uses for
   height, speed and FOV, so the defaults match without config edits.
-- **Packaging.** A PyInstaller build of the bridge, so people don't need Python installed.
+- **Packaging.** `pc-bridge/build_exe.py` makes a standalone exe. A signed build (no
+  SmartScreen warning), or an installer that also sets up ViGEmBus, would be nicer.
 - **iPhone app.** The protocol is simple enough to port.
 
 ## Pull requests
