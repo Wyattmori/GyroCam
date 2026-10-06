@@ -25,7 +25,7 @@ in-game camera follows.
 |---------|--------------|
 | Move the phone | Aims the camera |
 | LOOK stick | Aims quickly, on top of the gyro |
-| MOVE stick / UP/DN | Flies the camera |
+| MOVE stick / UP/DN | Forward/Rewinds the replay |
 | SENS − / + | Turn more or less per phone movement |
 | FOV slider | Sets the game's field of view. **SYNC** fixes it if it gets out of step |
 | RECENTER (Vol+) | Camera returns home. **Hold** to save the current view as home |
